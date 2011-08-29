@@ -57,6 +57,21 @@ class TestSlumberMock(unittest2.TestCase):
         self.assertEquals(pp1.pk, 1)
         self.assertEquals(pp1.pizza.name, 'Margarita')
 
+    @mock_client(
+        checks__Model1 = [
+            dict(pk=1)
+        ],
+        checks__Model2 = [
+            dict(pk=1)
+        ]
+    )
+    @mock_client()
+    def test_mock_twice(self):
+        p1 = client.checks.Model1.get(pk=1)
+        self.assertEquals(p1.pk, 1)
+        p2 = client.checks.Model2.get(pk=1)
+        self.assertEquals(p2.pk, 1)
+
 
     @mock_client(django__contrib__auth__User=[])
     def test_not_found_asserts(self):
