@@ -2,6 +2,7 @@ from django.conf import settings
 from django.test import TestCase
 
 from slumber import client
+from slumber._caches import PER_THREAD
 from slumber.connector.middleware import Cache
 
 from slumber_test.tests.client import TestsWithPizza
@@ -55,6 +56,10 @@ class TestSetting(TestCase):
         called = []
         middleware = Cache()
         middleware.process_request(None)
+        # per thread cache should be enabled at the beginning of a request
+        self.assertTrue(hasattr(PER_THREAD, 'CACHE'))
         response = middleware.process_response(None, 'response')
+        # per thread cache should be cleared at the end of a request
+        self.assertFalse(hasattr(PER_THREAD, 'CACHE'))
         self.assertEqual(response, 'response')
 
