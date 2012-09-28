@@ -6,7 +6,7 @@ from django.conf import settings
 from urllib import urlencode
 from urlparse import urljoin
 
-from slumber._caches import MODEL_URL_TO_SLUMBER_MODEL
+from slumber._caches import PER_THREAD, MODEL_URL_TO_SLUMBER_MODEL
 from slumber.connector.dictobject import DictObject
 from slumber.connector.json import from_json_data
 from slumber.connector.model import get_model
@@ -20,6 +20,13 @@ class ServiceConnector(object):
     """
     def __init__(self, directory):
         self._directory = directory
+
+    @classmethod
+    def _flush_client_instance_cache(cls):
+        """Flush the (global) instance cache.
+        """
+        assert hasattr(PER_THREAD, "CACHE")
+        PER_THREAD.CACHE.clear()
 
     def __getattr__(self, attr_name):
         """Fetch the application list from the Slumber directory on request.
