@@ -4,7 +4,7 @@
 from django.contrib.auth import authenticate
 
 from slumber import client
-from slumber._caches import CLIENT_INSTANCE_CACHE, PER_THREAD
+from slumber._caches import PER_THREAD
 
 
 class Cache(object):
@@ -17,7 +17,6 @@ class Cache(object):
     def process_request(self, _request):
         """Turn the cache on.
         """
-        #CLIENT_INSTANCE_CACHE.enabled = True
         if not hasattr(PER_THREAD, "CACHE"):
             PER_THREAD.CACHE = type('cache', (dict,), {})()
 
@@ -28,9 +27,6 @@ class Cache(object):
         if hasattr(PER_THREAD, "CACHE"):
             delattr(PER_THREAD, "CACHE")
 
-        # We're inside Slumber so the private access is ok.
-        # pylint: disable=W0212
-        client._flush_client_instance_cache()
         return response
 
 

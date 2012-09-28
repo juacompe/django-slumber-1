@@ -48,7 +48,7 @@ class _InstanceProxy(object):
         if not instance:
             # We now have a cache miss so construct a new connector
             instance = _InstanceConnector(self._url, **self._fields)
-            if hasattr(PER_THREAD, "CACHE") and PER_THREAD.CACHE.get('enabled', None):
+            if hasattr(PER_THREAD, "CACHE"):
                 PER_THREAD.CACHE[self._url] = instance
         return instance
 

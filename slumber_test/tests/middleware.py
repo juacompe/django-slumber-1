@@ -53,12 +53,8 @@ class TestMiddleware(TestsWithPizza):
 class TestSetting(TestCase):
     def test_request(self):
         called = []
-        def flush_cache(*a):
-            called.append(True)
         middleware = Cache()
         middleware.process_request(None)
-        with patch('slumber.connector.Client._flush_client_instance_cache', flush_cache):
-            response = middleware.process_response(None, 'response')
-        self.assertTrue(called)
+        response = middleware.process_response(None, 'response')
         self.assertEqual(response, 'response')
 

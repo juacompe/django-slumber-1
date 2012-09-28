@@ -6,8 +6,7 @@ from django.conf import settings
 from urllib import urlencode
 from urlparse import urljoin
 
-from slumber._caches import CLIENT_INSTANCE_CACHE, \
-    MODEL_URL_TO_SLUMBER_MODEL
+from slumber._caches import MODEL_URL_TO_SLUMBER_MODEL
 from slumber.connector.dictobject import DictObject
 from slumber.connector.json import from_json_data
 from slumber.connector.model import get_model
@@ -66,12 +65,6 @@ class Client(ServiceConnector):
             for k, v in services.items():
                 setattr(self, k, ServiceConnector(v))
             super(Client, self).__init__(None)
-
-    @classmethod
-    def _flush_client_instance_cache(cls):
-        """Flush the (global) instance cache.
-        """
-        CLIENT_INSTANCE_CACHE.clear()
 
 
 class AppConnector(DictObject):

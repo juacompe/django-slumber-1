@@ -12,9 +12,5 @@ DJANGO_MODEL_TO_SLUMBER_MODEL = {}
 # Stores the slumber models for given model URLs
 MODEL_URL_TO_SLUMBER_MODEL = {}
 
-
-# Stores instances in the client
-CLIENT_INSTANCE_CACHE = type('cache', (dict,), {})()
+# thread local cache
 PER_THREAD = threading.local()
-# Leave the cache off by default
-CLIENT_INSTANCE_CACHE.enabled = False
