@@ -3,7 +3,7 @@
 """
 from urlparse import urljoin
 
-from slumber._caches import CLIENT_INSTANCE_CACHE, \
+from slumber._caches import PER_THREAD, \
     MODEL_URL_TO_SLUMBER_MODEL
 from slumber.connector.dictobject import DictObject
 from slumber.connector.ua import get
@@ -42,12 +42,14 @@ class _InstanceProxy(object):
     def _fetch_instance(self):
         """Fetch the underlying instance.
         """
-        instance = CLIENT_INSTANCE_CACHE.get(self._url, None)
+        instance = None
+        if hasattr(PER_THREAD, "CACHE"):
+            instance = PER_THREAD.CACHE.get(self._url, None)
         if not instance:
             # We now have a cache miss so construct a new connector
             instance = _InstanceConnector(self._url, **self._fields)
-            if CLIENT_INSTANCE_CACHE.enabled:
-                CLIENT_INSTANCE_CACHE[self._url] = instance
+            if hasattr(PER_THREAD, "CACHE") and PER_THREAD.CACHE.get('enabled', None):
+                PER_THREAD.CACHE[self._url] = instance
         return instance
 
     def __getattr__(self, name):
