@@ -1,4 +1,5 @@
 from authentication import *
+from caches import *
 from client import *
 from middleware import *
 from mock_client import *
